@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import css from './App.module.css';
-// import Searchbar from './Searchbar/Searchbar';
+import Searchbar from './Searchbar/Searchbar';
 // import ImageGallery from './ImageGallery/ImageGallery';
 // import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 // import Modal from './Modal/Modal';
@@ -10,24 +10,35 @@ import css from './App.module.css';
 import { getMovies } from 'services/getMovies';
 
 class App extends Component {
-  state = {};
+  state = {
+    data: {},
+    loader: false,
+    filter: '',
+  };
 
-  componentDidMount() {
-    getMovies();
-    console.log('montaje en el Dom');
-    // this.setState(getMovies());
-  }
+  handlerSearch = word => {
+    this.setState({ filter: word });
+  };
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('componentDidUpdate');
+  //   if (prevState.filter !== this.props.filter) {
+  //     getMovies(this.props.filter).then(function (response) {
+  //       console.log(response);
+  //     });
+  //   }
+  // }
 
   render() {
+    console.log('render', this.state);
     return (
       <div className={css.app}>
-        {/* <Searchbar />
-        <ImageGallery />
+        <Searchbar handlerSearch={this.handlerSearch} />
+        {/* <ImageGallery />
         <ImageGalleryItem />
         <Modal />
         <Button />
         <Loader /> */}
-        {/* {console.log(this.state)} */}
       </div>
     );
   }

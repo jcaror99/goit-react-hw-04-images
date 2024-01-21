@@ -1,18 +1,24 @@
 import { instance } from './settingServices';
 
-const getMovies = (word = 'cat') => {
-  instance
+const getMovies = (word = 'cat', page = 1) => {
+  return instance
     .get('', {
       params: {
         q: word,
-        page: '1',
+        page: page,
         image_type: 'photo',
         orientation: 'horizontal',
         per_page: '12',
       },
     })
     .then(function (response) {
-      console.log(response.data);
+      const hits = response.data.hits.map(element => ({
+        id: element.id,
+        webformatURL: element.webformatURL,
+        largeImageURL: element.largeImageURL,
+      }));
+
+      return hits;
     })
     .catch(function (error) {
       console.log(error);

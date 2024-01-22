@@ -4,11 +4,11 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem.jsx';
 
 class ImageGallery extends Component {
   render() {
-    const { hits } = this.props;
+    const { hits, handlerView } = this.props;
 
     return (
       <ul className={css.imageGallery}>
-        <ImageGalleryItem hits={hits} />
+        <ImageGalleryItem hits={hits} handlerView={handlerView} />
       </ul>
     );
   }

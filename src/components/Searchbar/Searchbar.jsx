@@ -1,32 +1,31 @@
-import { Component } from 'react';
-import css from './Searchbar.module.css';
+import css from "./Searchbar.module.css";
 
-class Searchbar extends Component {
-  handlerFilterWord = e => {
+const Searchbar = (props) => {
+  const { handlerSearch } = props;
+
+  const handlerFilterWord = (e) => {
     e.preventDefault();
-    const filterWord = document.querySelector('input');
-    this.props.handlerSearch(filterWord.value);
+    const filterWord = document.querySelector("input");
+    handlerSearch(filterWord.value);
   };
 
-  render() {
-    return (
-      <header className={css.searchbar}>
-        <form className={css.searchForm} onSubmit={this.handlerFilterWord}>
-          <button type="submit" className={css.searchFormButton}>
-            <span className={css.searchFormButtonLabel}>Search</span>
-          </button>
+  return (
+    <header className={css.searchbar}>
+      <form className={css.searchForm} onSubmit={handlerFilterWord}>
+        <button type="submit" className={css.searchFormButton}>
+          <span className={css.searchFormButtonLabel}>Search</span>
+        </button>
 
-          <input
-            className={css.searchFormInput}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className={css.searchFormInput}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
+  );
+};
 
 export default Searchbar;

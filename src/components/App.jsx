@@ -1,66 +1,55 @@
-import { Component } from 'react';
-import css from './App.module.css';
-import Searchbar from './Searchbar/Searchbar';
-import ImageGallery from './ImageGallery/ImageGallery';
-import Modal from './Modal/Modal';
-import Button from './Button/Button';
-import Loader from './Loader/Loader';
+import css from "./App.module.css";
+import Searchbar from "./Searchbar/Searchbar";
+import ImageGallery from "./ImageGallery/ImageGallery";
+import Modal from "./Modal/Modal";
+import Button from "./Button/Button";
+import Loader from "./Loader/Loader";
 
-import { getMovies } from '../services/getMovies';
+import { getMovies } from "../services/getMovies";
+import { useState } from "react";
 
-class App extends Component {
-  state = {
-    hits: [],
-    loader: false,
-    page: 1,
-    searchWorld: '',
-    clickedImage: '',
-  };
+const App = () => {
+  const [hits, setHits] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const [page, setPage] = useState(1);
+  const [searchWorld, setSearchWorld] = useState("");
+  const [clickedImage, setClickedImage] = useState("");
 
-  handlerSearch = word => {
-    this.setState({ loader: true });
+  const handlerSearch = (word) => {
+    setLoader(true);
     getMovies(word)
-      .then(response => {
-        this.setState({ hits: response, searchWorld: word, loader: false });
+      .then((response) => {
+        setHits(response);
+        setSearchWorld(word);
+        setLoader(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
-  handlerLoader = () => {
-    const { searchWorld, page } = this.state;
-    getMovies(searchWorld, page + 1).then(newHits =>
-      this.setState(prevState => ({
-        hits: [...prevState.hits, ...newHits],
-        page: prevState.page + 1,
-      }))
-    );
+  const handlerLoader = () => {
+    getMovies(searchWorld, page + 1).then((newHits) => {
+      setHits((prevState) => [...hits, ...newHits]);
+      setPage((prevState) => page + 1);
+    });
   };
 
-  handlerView = image => {
-    this.setState({ clickedImage: image });
+  const handlerView = (image) => {
+    setClickedImage(image);
   };
 
-  render() {
-    console.log(this.state);
-    return (
-      <div className={css.app}>
-        <Searchbar handlerSearch={this.handlerSearch} />
-        {this.state.loader && <Loader />}
-        <ImageGallery hits={this.state.hits} handlerView={this.handlerView} />
-        {this.state.hits.length > 0 && (
-          <Button handlerLoader={this.handlerLoader} />
-        )}
-        {this.state.clickedImage !== '' && (
-          <Modal
-            clickedImage={this.state.clickedImage}
-            handlerView={this.handlerView}
-          />
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={css.app}>
+      <Searchbar handlerSearch={handlerSearch} />
+      {loader && <Loader />}
+      <ImageGallery hits={hits} handlerView={handlerView} />
+      {hits.length > 0 && <Button handlerLoader={handlerLoader} />}
+      {clickedImage !== "" && (
+        <Modal clickedImage={clickedImage} handlerView={handlerView} />
+      )}
+    </div>
+  );
+};
 
 export { App };
